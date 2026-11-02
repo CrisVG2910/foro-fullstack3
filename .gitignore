@@ -1,0 +1,5 @@
+**/target/
+.vscode/
+.env
+**/wallet/
+**/Wallet_*.zip
