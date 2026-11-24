@@ -1,0 +1,80 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+    <section class="auth-card" aria-labelledby="registro-title">
+      <span class="eyebrow">ÚNETE A LA COMUNIDAD</span>
+      <h1 id="registro-title">Crear cuenta</h1>
+      <p class="text-secondary mb-4">Completa tus datos para empezar a publicar y comentar.</p>
+      @if (error()) { <div class="alert alert-danger" role="alert">{{ error() }}</div> }
+      <form [formGroup]="form" (ngSubmit)="registrar()" novalidate>
+        <div class="row g-3">
+          <div class="col-12">
+            <label for="reg-nombre" class="form-label">Nombre completo</label>
+            <input id="reg-nombre" formControlName="nombre" class="form-control"
+                   autocomplete="name" placeholder="Ej.: María González"
+                   [class.is-invalid]="form.controls.nombre.invalid && form.controls.nombre.touched" />
+            @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+              <div class="invalid-feedback">Indica un nombre de entre 3 y 100 caracteres.</div>
+            }
+          </div>
+          <div class="col-12">
+            <label for="reg-email" class="form-label">Correo electrónico</label>
+            <input id="reg-email" type="email" formControlName="email" class="form-control"
+                   autocomplete="email" placeholder="nombre@correo.cl"
+                   [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched" />
+            @if (form.controls.email.touched && form.controls.email.invalid) {
+              <div class="invalid-feedback">Ingresa un correo válido (máximo 150 caracteres).</div>
+            }
+          </div>
+          <div class="col-12 col-lg-6">
+            <label for="reg-password" class="form-label">Contraseña</label>
+            <input id="reg-password" formControlName="password" class="form-control"
+                   autocomplete="new-password" [type]="mostrarPassword() ? 'text' : 'password'"
+                   [class.is-invalid]="form.controls.password.invalid && form.controls.password.touched" />
+            @if (form.controls.password.touched && form.controls.password.invalid) {
+              <div class="invalid-feedback">Revisa los requisitos de contraseña.</div>
+            }
+          </div>
+          <div class="col-12 col-lg-6">
+            <label for="reg-confirmar" class="form-label">Confirmar contraseña</label>
+            <input id="reg-confirmar" formControlName="confirmarPassword" class="form-control"
+                   type="password" autocomplete="new-password"
+                   [class.is-invalid]="form.controls.confirmarPassword.touched && (form.controls.confirmarPassword.invalid || form.hasError('passwordsDistintas'))" />
+            @if (form.controls.confirmarPassword.touched && form.controls.confirmarPassword.hasError('required')) {
+              <div class="invalid-feedback">Confirma la contraseña.</div>
+            } @else if (form.controls.confirmarPassword.touched && form.hasError('passwordsDistintas')) {
+              <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+            }
+          </div>
+        </div>
+        <div class="form-check my-3">
+          <input id="mostrar-reg" type="checkbox" class="form-check-input"
+                 [checked]="mostrarPassword()" (change)="mostrarPassword.set(!mostrarPassword())" />
+          <label class="form-check-label" for="mostrar-reg">Mostrar contraseña</label>
+        </div>
+        <div class="soft-note mb-3">
+          <strong>Requisitos de contraseña</strong>
+          <div class="row row-cols-1 row-cols-sm-2 mt-2 g-2 small">
+            <div [class.text-success]="form.controls.password.value.length >= 8 && form.controls.password.value.length <= 32">
+              ✓ Entre 8 y 32 caracteres
+            </div>
+            <div [class.text-success]="!form.controls.password.hasError('mayuscula')">✓ Una letra mayúscula</div>
+            <div [class.text-success]="!form.controls.password.hasError('minuscula')">✓ Una letra minúscula</div>
+            <div [class.text-success]="!form.controls.password.hasError('numero')">✓ Un número</div>
+            <div [class.text-success]="!form.controls.password.hasError('especial')">✓ Un carácter especial</div>
+          </div>
+        </div>
+        <div class="form-check mb-4">
+          <input id="reg-terminos" type="checkbox" class="form-check-input"
+                 formControlName="aceptaTerminos"
+                 [class.is-invalid]="form.controls.aceptaTerminos.touched && form.controls.aceptaTerminos.invalid" />
+          <label class="form-check-label" for="reg-terminos">Acepto participar en esta demostración académica.</label>
+          @if (form.controls.aceptaTerminos.touched && form.controls.aceptaTerminos.invalid) {
+            <div class="invalid-feedback">Debes marcar esta opción.</div>
+          }
+        </div>
+        <button class="btn btn-primary w-100 py-2" type="submit">Crear cuenta</button>
+      </form>
+      <p class="text-center small mt-4 mb-0">¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </section>
+  </div>
+</div>

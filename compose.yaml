@@ -1,0 +1,50 @@
+# Ejecutar desde la carpeta raiz: docker compose up -d --build
+# Requiere: frontend-angular/ completo, wallet/ con tnsnames.ora, .env local.
+services:
+  frontend:
+    build:
+      context: ./frontend-angular
+      dockerfile: Dockerfile
+    image: foro-fullstack3/frontend:sumativa2
+    ports:
+      - "${PUBLISH_HOST:-127.0.0.1}:${FRONTEND_PORT:-4200}:8080"
+    restart: unless-stopped
+
+  usuarios:
+    build:
+      context: ./usuarios-service
+      dockerfile: Dockerfile
+    image: foro-fullstack3/usuarios:sumativa2
+    environment:
+      DB_URL: ${DB_URL:?Falta DB_URL en .env}
+      DB_USER: ${DB_USER:?Falta DB_USER en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
+      JWT_SECRET: ${JWT_SECRET:?Falta JWT_SECRET en .env}
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=70.0"
+    volumes:
+      - type: bind
+        source: ./wallet
+        target: /opt/oracle/wallet
+        read_only: true
+    ports:
+      - "${PUBLISH_HOST:-127.0.0.1}:${USUARIOS_PORT:-8081}:8081"
+    restart: unless-stopped
+
+  foro:
+    build:
+      context: ./foro-service
+      dockerfile: Dockerfile
+    image: foro-fullstack3/foro:sumativa2
+    environment:
+      DB_URL: ${DB_URL:?Falta DB_URL en .env}
+      DB_USER: ${DB_USER:?Falta DB_USER en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=70.0"
+    volumes:
+      - type: bind
+        source: ./wallet
+        target: /opt/oracle/wallet
+        read_only: true
+    ports:
+      - "${PUBLISH_HOST:-127.0.0.1}:${FORO_PORT:-8082}:8082"
+    restart: unless-stopped

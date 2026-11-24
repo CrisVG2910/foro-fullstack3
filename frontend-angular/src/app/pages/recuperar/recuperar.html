@@ -1,0 +1,29 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-9 col-lg-6 col-xl-5">
+    <section class="auth-card" aria-labelledby="recuperar-title">
+      <span class="eyebrow">AYUDA CON TU CUENTA</span>
+      <h1 id="recuperar-title">Recuperar contraseña</h1>
+      <p class="text-secondary mb-4">Ingresa tu correo para iniciar el proceso de recuperación.</p>
+      @if (enviado()) {
+        <div class="alert alert-success" role="status">
+          Solicitud simulada. En una aplicación real, si el correo corresponde a una cuenta,
+          recibirías instrucciones de recuperación.
+        </div>
+      }
+      <form [formGroup]="form" (ngSubmit)="recuperar()" novalidate>
+        <div class="mb-4">
+          <label for="rec-email" class="form-label">Correo electrónico</label>
+          <input id="rec-email" type="email" class="form-control" formControlName="email"
+                 autocomplete="email" placeholder="nombre@correo.cl"
+                 [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <div class="invalid-feedback">Ingresa un correo electrónico válido.</div>
+          }
+        </div>
+        <button class="btn btn-primary w-100 py-2" type="submit">Solicitar recuperación</button>
+      </form>
+      <div class="soft-note small mt-4">Esta pantalla es una simulación: no envía correos ni cambia contraseñas.</div>
+      <p class="text-center small mt-4 mb-0"><a routerLink="/login">Volver al inicio de sesión</a></p>
+    </section>
+  </div>
+</div>

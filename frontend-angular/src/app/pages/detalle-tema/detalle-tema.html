@@ -1,0 +1,65 @@
+<a routerLink="/temas" class="text-decoration-none small">← Volver a publicaciones</a>
+@if (tema(); as temaActual) {
+  @if (temaActual.estado === 'VISIBLE' || auth.esAdmin()) {
+    <article class="content-card detail-card mt-3 mb-4">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <span class="badge bg-primary-subtle text-primary-emphasis">{{ foro.nombreCategoria(temaActual.categoriaId) }}</span>
+        @if (temaActual.estado === 'OCULTO') { <span class="badge text-bg-danger">Oculto por moderación</span> }
+      </div>
+      <h1 class="fw-bold h2">{{ temaActual.titulo }}</h1>
+      <p class="small text-secondary mb-4">Por {{ temaActual.autorNombre }} · {{ temaActual.fecha | date:'dd/MM/yyyy HH:mm' }}</p>
+      <p class="topic-content">{{ temaActual.contenido }}</p>
+      @if (foro.puedeEditarTema(temaActual)) {
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a class="btn btn-outline-primary btn-sm" [routerLink]="['/temas', temaActual.id, 'editar']">Editar</a>
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="eliminarTema()">Eliminar</button>
+        </div>
+      }
+    </article>
+
+    <section aria-labelledby="comentarios-titulo" class="content-card detail-card mb-4">
+      <h2 class="h4 fw-bold" id="comentarios-titulo">Comentarios ({{ comentarios().length }})</h2>
+      @if (error()) { <div class="alert alert-danger" role="alert">{{ error() }}</div> }
+      @if (exito()) { <div class="alert alert-success" role="status">{{ exito() }}</div> }
+      @if (comentarios().length) {
+        <div class="comments-list">
+          @for (comentario of comentarios(); track comentario.id) {
+            <article class="border-bottom py-3">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <strong>{{ comentario.autorNombre }}</strong>
+                <span class="small text-secondary">{{ comentario.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+              @if (comentario.estado === 'OCULTO') { <span class="badge text-bg-danger my-2">Comentario oculto</span> }
+              <p class="mb-1 comment-content">{{ comentario.contenido }}</p>
+              @if (foro.puedeEliminarComentario(comentario)) {
+                <button type="button" class="btn btn-sm btn-link text-danger px-0" (click)="eliminarComentario(comentario.id)">Eliminar comentario</button>
+              }
+            </article>
+          }
+        </div>
+      } @else {
+        <p class="text-secondary mt-3">Todavía no hay comentarios. Sé el primero en participar.</p>
+      }
+
+      @if (temaActual.estado !== 'VISIBLE') {
+        <div class="alert alert-warning mt-4">No se admiten nuevos comentarios en publicaciones ocultas.</div>
+      } @else if (auth.usuarioActual()) {
+        <form class="mt-4" (ngSubmit)="publicarComentario()">
+          <label for="nuevo-comentario" class="form-label fw-semibold">Escribir comentario</label>
+          <textarea id="nuevo-comentario" rows="4" class="form-control" maxlength="1000"
+                    [formControl]="nuevoComentario" [class.is-invalid]="nuevoComentario.invalid && nuevoComentario.touched"></textarea>
+          @if (nuevoComentario.invalid && nuevoComentario.touched) {
+            <div class="text-danger small mt-1">El comentario debe tener entre 3 y 1000 caracteres.</div>
+          }
+          <button class="btn btn-primary mt-3" type="submit">Publicar comentario</button>
+        </form>
+      } @else {
+        <div class="alert alert-info mt-4">Para comentar debes <a routerLink="/login">iniciar sesión</a>.</div>
+      }
+    </section>
+  } @else {
+    <div class="alert alert-warning mt-3">Este tema no se encuentra disponible.</div>
+  }
+} @else {
+  <div class="alert alert-warning mt-3">No encontramos la publicación solicitada.</div>
+}
