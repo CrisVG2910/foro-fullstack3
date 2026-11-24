@@ -1,0 +1,11 @@
+/target
+/.git
+/.idea
+/.vscode
+/.mvn
+mvnw
+mvnw.cmd
+**/*.log
+.env
+wallet
+Wallet_*.zip

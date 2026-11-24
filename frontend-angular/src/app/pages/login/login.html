@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-9 col-lg-6 col-xl-5">
+    <section class="auth-card" aria-labelledby="login-title">
+      <span class="eyebrow">BIENVENIDO DE NUEVO</span>
+      <h1 id="login-title">Iniciar sesión</h1>
+      <p class="text-secondary mb-4">Ingresa a tu comunidad y participa en las conversaciones.</p>
+
+      @if (error()) { <div class="alert alert-danger" role="alert">{{ error() }}</div> }
+      <form [formGroup]="form" (ngSubmit)="ingresar()" novalidate>
+        <div class="mb-3">
+          <label for="login-email" class="form-label">Correo electrónico</label>
+          <input id="login-email" class="form-control" type="email" autocomplete="username"
+                 placeholder="nombre@correo.cl" formControlName="email"
+                 [class.is-invalid]="form.controls.email.invalid && form.controls.email.touched" />
+          @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+            <div class="invalid-feedback">El correo es obligatorio.</div>
+          } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+            <div class="invalid-feedback">Ingresa un correo válido.</div>
+          }
+        </div>
+
+        <div class="mb-2">
+          <label for="login-password" class="form-label">Contraseña</label>
+          <div class="input-group">
+            <input id="login-password" class="form-control" formControlName="password"
+                   autocomplete="current-password" placeholder="Tu contraseña"
+                   [type]="mostrarPassword() ? 'text' : 'password'"
+                   [class.is-invalid]="form.controls.password.invalid && form.controls.password.touched" />
+            <button class="btn btn-outline-secondary" type="button"
+                    (click)="mostrarPassword.set(!mostrarPassword())">
+              {{ mostrarPassword() ? 'Ocultar' : 'Mostrar' }}
+            </button>
+            @if (form.controls.password.touched && form.controls.password.invalid) {
+              <div class="invalid-feedback">La contraseña es obligatoria.</div>
+            }
+          </div>
+        </div>
+        <div class="text-end mb-4"><a routerLink="/recuperar" class="small">¿Olvidaste tu contraseña?</a></div>
+        <button type="submit" class="btn btn-primary w-100 py-2">Ingresar</button>
+      </form>
+      <div class="soft-note mt-4 small">
+        <strong>Accesos de demostración:</strong><br />
+
+        ADMIN: <code>admin&#64;foro.cl</code> / <code>Admin123!</code>
+        USER: <code>usuario&#64;foro.cl</code> / <code>Usuario123!</code>
+
+      </div>
+      <p class="text-center small mt-4 mb-0">¿No tienes una cuenta? <a routerLink="/registro">Regístrate</a></p>
+    </section>
+  </div>
+</div>

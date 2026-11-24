@@ -1,0 +1,39 @@
+# En VM Cloud: levantar imagenes ya publicadas en GHCR (sin codigo fuente).
+# Requiere .env local y wallet/ (solo en el servidor). Mantener backend privado.
+services:
+  frontend:
+    image: ghcr.io/crisvg2910/foro-fullstack3-frontend:latest
+    ports:
+      - "0.0.0.0:${FRONTEND_PUBLIC_PORT:-80}:8080"
+    restart: unless-stopped
+
+  usuarios:
+    image: ghcr.io/crisvg2910/foro-fullstack3-usuarios:latest
+    environment:
+      DB_URL: ${DB_URL:?Falta DB_URL en .env}
+      DB_USER: ${DB_USER:?Falta DB_USER en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
+      JWT_SECRET: ${JWT_SECRET:?Falta JWT_SECRET en .env}
+    volumes:
+      - type: bind
+        source: ./wallet
+        target: /opt/oracle/wallet
+        read_only: true
+    ports:
+      - "127.0.0.1:8081:8081"
+    restart: unless-stopped
+
+  foro:
+    image: ghcr.io/crisvg2910/foro-fullstack3-foro:latest
+    environment:
+      DB_URL: ${DB_URL:?Falta DB_URL en .env}
+      DB_USER: ${DB_USER:?Falta DB_USER en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env}
+    volumes:
+      - type: bind
+        source: ./wallet
+        target: /opt/oracle/wallet
+        read_only: true
+    ports:
+      - "127.0.0.1:8082:8082"
+    restart: unless-stopped

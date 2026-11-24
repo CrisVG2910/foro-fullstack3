@@ -1,5 +1,20 @@
+# Build Java
 **/target/
+# Frontend Angular
+**/node_modules/
+**/.angular/
+**/dist/
+**/coverage/
+# Herramientas
 .vscode/
+.idea/
+# Secretos (NUNCA subir)
 .env
+**/.env
+.env.*
+!.env.example
+wallet/
 **/wallet/
 **/Wallet_*.zip
+# Proyecto demostrativo generado desde el arquetipo
+/prueba-arquetipo-service/

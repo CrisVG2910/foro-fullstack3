@@ -1,0 +1,62 @@
+<section class="mb-4 d-flex justify-content-between align-items-start flex-wrap gap-3">
+  <div>
+    <span class="small fw-bold text-primary text-uppercase">Comunidad</span>
+    <h1 class="fw-bold mb-2">Explorar temas</h1>
+    <p class="text-secondary mb-0">Busca conversaciones y filtra por categoría.</p>
+  </div>
+  @if (auth.usuarioActual()) {
+    <a class="btn btn-primary" routerLink="/crear-tema">+ Nueva publicación</a>
+  } @else {
+    <a class="btn btn-outline-primary" routerLink="/login">Inicia sesión para publicar</a>
+  }
+</section>
+
+<section class="content-card mb-4" aria-label="Filtros de temas">
+  <div class="row g-3 align-items-end">
+    <div class="col-12 col-md-7">
+      <label for="buscar-tema" class="form-label fw-semibold">Buscar publicaciones</label>
+      <input id="buscar-tema" #buscar type="search" class="form-control" placeholder="Título, contenido o autor"
+             [value]="busqueda()" (input)="busqueda.set(buscar.value)" />
+    </div>
+    <div class="col-12 col-md-5">
+      <label for="categoria-tema" class="form-label fw-semibold">Categoría</label>
+      <select id="categoria-tema" #seleccion class="form-select" [value]="categoriaSeleccionada()"
+              (change)="cambiarCategoria(seleccion.value)">
+        <option [value]="0">Todas las categorías</option>
+        @for (categoria of foro.categorias(); track categoria.id) {
+          <option [value]="categoria.id">{{ categoria.nombre }}</option>
+        }
+      </select>
+    </div>
+  </div>
+</section>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0 fw-semibold">Publicaciones</h2>
+  <span class="text-secondary small">{{ filtrados().length }} resultado(s)</span>
+</div>
+
+@if (filtrados().length) {
+  <div class="d-grid gap-3">
+    @for (tema of filtrados(); track tema.id) {
+      <article class="content-card topic-card">
+        <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
+          <span class="badge bg-primary-subtle text-primary-emphasis">{{ foro.nombreCategoria(tema.categoriaId) }}</span>
+          <small class="text-secondary">{{ tema.fecha | date:'dd/MM/yyyy HH:mm' }}</small>
+        </div>
+        <h3 class="h5 fw-bold"><a class="text-decoration-none text-dark" [routerLink]="['/temas', tema.id]">{{ tema.titulo }}</a></h3>
+        <p class="text-secondary mb-3">{{ tema.contenido.length > 220 ? tema.contenido.slice(0, 220) + '…' : tema.contenido }}</p>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <small class="text-secondary">Por {{ tema.autorNombre }} · {{ foro.cantidadComentarios(tema.id) }} comentarios</small>
+          <a class="btn btn-sm btn-outline-primary" [routerLink]="['/temas', tema.id]">Leer y comentar</a>
+        </div>
+      </article>
+    }
+  </div>
+} @else {
+  <div class="content-card text-center py-5">
+    <h3 class="h5">No encontramos publicaciones</h3>
+    <p class="text-secondary">Prueba con otra búsqueda o selecciona una categoría diferente.</p>
+    <button type="button" class="btn btn-outline-primary" (click)="busqueda.set(''); cambiarCategoria('0')">Limpiar filtros</button>
+  </div>
+}

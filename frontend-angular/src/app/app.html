@@ -1,0 +1,42 @@
+<header class="site-header">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand fw-bold" routerLink="/" (click)="cerrarMenu()">
+        <span class="brand-icon">F</span> ForoFullStack3
+      </a>
+      <button class="navbar-toggler" type="button" aria-label="Abrir menú"
+              [attr.aria-expanded]="menuAbierto()" (click)="menuAbierto.set(!menuAbierto())">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" [class.show]="menuAbierto()">
+        <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <a class="nav-link" routerLink="/" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact:true}" (click)="cerrarMenu()">Inicio</a>
+          <a class="nav-link" routerLink="/temas" routerLinkActive="active" (click)="cerrarMenu()">Explorar temas</a>
+          @if (auth.usuarioActual(); as usuario) {
+            <a class="nav-link" routerLink="/crear-tema" routerLinkActive="active" (click)="cerrarMenu()">Crear tema</a>
+            <a class="nav-link" routerLink="/perfil" routerLinkActive="active" (click)="cerrarMenu()">Mi perfil</a>
+            @if (auth.esAdmin()) {
+              <a class="nav-link" routerLink="/admin" routerLinkActive="active" (click)="cerrarMenu()">Administración</a>
+            }
+            <span class="small text-secondary mx-lg-2">Hola, {{ usuario.nombre }}</span>
+            <button class="btn btn-outline-primary" type="button" (click)="salir()">Cerrar sesión</button>
+          } @else {
+            <a class="btn btn-outline-primary" routerLink="/login" (click)="cerrarMenu()">Iniciar sesión</a>
+            <a class="btn btn-primary" routerLink="/registro" (click)="cerrarMenu()">Registrarse</a>
+          }
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<main class="container py-4 py-lg-5">
+  <div class="small text-secondary mb-3">Modo demostración — Angular funciona independientemente de Oracle y Spring Boot.</div>
+  <router-outlet></router-outlet>
+</main>
+<footer class="site-footer mt-5">
+  <div class="container py-4 text-center">
+    <p class="mb-1 fw-semibold">ForoFullStack3</p>
+    <small>Proyecto académico - Desarrollo Full Stack III</small>
+  </div>
+</footer>

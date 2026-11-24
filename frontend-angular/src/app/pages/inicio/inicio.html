@@ -1,0 +1,55 @@
+<section class="hero-section mb-5">
+  <div class="row align-items-center g-4">
+    <div class="col-12 col-lg-9">
+      <span class="badge bg-light text-primary mb-3">Comunidad de debate</span>
+      <h1>Bienvenido a ForoFullStack3</h1>
+      <p class="fs-5 mt-3 mb-4">Comparte conocimientos, participa en debates y conecta con nuestra comunidad.</p>
+      <a routerLink="/temas" class="btn btn-light btn-lg me-2 mb-2">Explorar temas</a>
+      <a routerLink="/crear-tema" class="btn btn-outline-light btn-lg mb-2">Crear publicación</a>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="categorias-titulo">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+    <div>
+      <h2 id="categorias-titulo" class="fw-bold h3 mb-1">Explora las categorías</h2>
+      <p class="text-secondary mb-0">Encuentra conversaciones sobre tus intereses.</p>
+    </div>
+    <span class="badge text-bg-light border">{{ foro.totalTemasVisibles() }} temas disponibles</span>
+  </div>
+  <div class="row g-4">
+    @for (categoria of foro.categorias(); track categoria.id) {
+      <div class="col-12 col-md-6 col-xl-4">
+        <article class="content-card">
+          <div class="fs-1 mb-3" aria-hidden="true">{{ categoria.icono }}</div>
+          <h3 class="h5 fw-bold">{{ categoria.nombre }}</h3>
+          <p class="text-secondary">{{ categoria.descripcion }}</p>
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <a [routerLink]="['/temas']" [queryParams]="{ categoria: categoria.id }" class="btn btn-outline-primary">Ver publicaciones</a>
+            <small class="text-secondary">{{ foro.cantidadTemasPorCategoria(categoria.id) }} temas</small>
+          </div>
+        </article>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="mt-5" aria-labelledby="recientes-titulo">
+  <div class="d-flex justify-content-between align-items-center mb-3 gap-2">
+    <h2 id="recientes-titulo" class="h3 fw-bold mb-0">Publicaciones recientes</h2>
+    <a routerLink="/temas" class="btn btn-link">Ver todos</a>
+  </div>
+  <div class="row g-3">
+    @for (tema of ultimosTemas(); track tema.id) {
+      <div class="col-12 col-lg-4">
+        <article class="content-card">
+          <span class="badge bg-primary-subtle text-primary-emphasis mb-3">{{ foro.nombreCategoria(tema.categoriaId) }}</span>
+          <h3 class="h5"><a class="text-decoration-none text-dark" [routerLink]="['/temas', tema.id]">{{ tema.titulo }}</a></h3>
+          <p class="text-secondary small">{{ tema.contenido.length > 115 ? tema.contenido.slice(0, 115) + '…' : tema.contenido }}</p>
+          <small class="text-secondary">{{ tema.autorNombre }} · {{ tema.fecha | date:'dd/MM/yyyy' }}</small>
+        </article>
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,125 @@
+
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+:root {
+  --foro-primary: #2563eb;
+  --foro-dark: #0f172a;
+  --foro-background: #f5f7fb;
+  --foro-border: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--foro-background);
+  color: var(--foro-dark);
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+.site-header {
+  background: white;
+  border-bottom: 1px solid var(--foro-border);
+}
+
+.navbar {
+  min-height: 78px;
+}
+
+.navbar-brand {
+  color: var(--foro-dark);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--foro-primary);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-link {
+  font-weight: 500;
+}
+
+.nav-link.active {
+  color: var(--foro-primary) !important;
+}
+
+.btn {
+  border-radius: 9px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: var(--foro-primary);
+  border-color: var(--foro-primary);
+}
+
+.content-card {
+  background: white;
+  border: 1px solid var(--foro-border);
+  border-radius: 16px;
+  padding: 24px;
+  height: 100%;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.content-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.hero-section {
+  background: linear-gradient(120deg, #1e3a8a, #2563eb);
+  color: white;
+  border-radius: 20px;
+  padding: 56px 42px;
+}
+
+.hero-section h1 {
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-weight: 700;
+}
+
+.site-footer {
+  background: white;
+  border-top: 1px solid var(--foro-border);
+  color: #64748b;
+}
+
+@media (max-width: 767px) {
+  .hero-section {
+    padding: 32px 24px;
+    border-radius: 14px;
+  }
+
+  .content-card {
+    padding: 18px;
+  }
+
+  .navbar-nav {
+    padding-top: 16px;
+    padding-bottom: 12px;
+  }
+
+  .navbar-nav .btn {
+    margin-top: 8px;
+  }
+}
